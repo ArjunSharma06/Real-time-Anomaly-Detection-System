@@ -8,8 +8,7 @@ import os # to avoid model training on every run
 
 df_smallnoise = pd.read_csv('anamoly/normal data/artificialNoAnomaly/artificialNoAnomaly/art_daily_small_noise.csv', parse_dates=['timestamp'], index_col='timestamp')
 df_jumpsup= pd.read_csv('anamoly/normal data/artificialWithAnomaly/artificialWithAnomaly/art_daily_jumpsup.csv', parse_dates=['timestamp'], index_col='timestamp')
-
-
+df_check = pd.read_csv('anamoly/normal data/artificialWithAnomaly/artificialWithAnomaly/art_load_balancer_spikes.csv', parse_dates=['timestamp'], index_col='timestamp')
 #training
 train_mean= df_smallnoise.mean()
 train_std= df_smallnoise.std()
@@ -79,10 +78,10 @@ train_mae_loss = np.mean(np.abs(x_train_pred - x_train), axis= 1)
 
 
 #reconstruction loss theshold
-threshold = np.max(train_mae_loss)
+threshold = np.percentile(train_mae_loss, 99)
 print("Reconstruction error threshold: ", threshold)
 
-df_testvalue= (df_jumpsup-train_mean)/train_std
+df_testvalue= (df_check-train_mean)/train_std
 fig, axes= plt.subplots()
 df_testvalue.plot(ax=axes, legend=False)
 
@@ -101,8 +100,8 @@ for data_idx in range(TIME_STEP - 1, len(df_testvalue) - TIME_STEP + 1):
         anomalous_data_indices.append(data_idx)
 
 
-df_subset = df_jumpsup.iloc[anomalous_data_indices]
+df_subset = df_check.iloc[anomalous_data_indices]
 fig, ax = plt.subplots()
-df_jumpsup.plot(legend=False, ax=ax)
+df_check.plot(legend=False, ax=ax)
 df_subset.plot(legend=False, ax=ax, color="g")
 plt.show()
