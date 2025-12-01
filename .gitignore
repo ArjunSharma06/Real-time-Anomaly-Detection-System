@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+andet/
+*.egg-info/
+
+# Large data files
+processed_data/*.npy
+processed_data/*.npz
+models/*.keras
+
+# Visualizations (optional - remove if you want to track them)
+models/visualizations/*.png
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter
+.ipynb_checkpoints/
